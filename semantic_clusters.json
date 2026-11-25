@@ -1,0 +1,120 @@
+[
+  {
+    "core_intent": "How do I change my password?",
+    "matches": [
+      "How do I change my password?",
+      "Can't remember my password, how can I reset it?",
+      "How do I reset my password?",
+      "I need to reset my login password."
+    ]
+  },
+  {
+    "core_intent": "What are the time-of-use rates on my plan?",
+    "matches": [
+      "What are the time-of-use rates on my plan?",
+      "How do I configure time-of-use rates through the API?",
+      "How does time-of-use billing work?"
+    ]
+  },
+  {
+    "core_intent": "Getting an error when I try to sign in.",
+    "matches": [
+      "Getting an error when I try to sign in.",
+      "I can't log into my account."
+    ]
+  },
+  {
+    "core_intent": "I forgot my password, what do I do?",
+    "matches": [
+      "I forgot my password, what do I do?",
+      "I can't log in, forgot my password."
+    ]
+  },
+  {
+    "core_intent": "Can you explain why my bill went up?",
+    "matches": [
+      "Can you explain why my bill went up?",
+      "Why is my power bill higher than usual this month?"
+    ]
+  },
+  {
+    "core_intent": "It says my account is locked out.",
+    "matches": [
+      "It says my account is locked out.",
+      "My account says it's locked, what now?"
+    ]
+  },
+  {
+    "core_intent": "Why can't I access my dashboard?",
+    "matches": [
+      "Why can't I access my dashboard?",
+      "I can't find my dashboard, where is it?"
+    ]
+  },
+  {
+    "core_intent": "Something seems off with my usage this month.",
+    "matches": [
+      "Something seems off with my usage this month.",
+      "My usage seems way higher than last month, why?"
+    ]
+  },
+  {
+    "core_intent": "I can't afford my power bill, what are my options?",
+    "matches": [
+      "I can't afford my power bill, what are my options?",
+      "I'm struggling to pay my power bill this month, what help is available?"
+    ]
+  },
+  {
+    "core_intent": "How do I compare my usage to last month?",
+    "matches": [
+      "How do I compare my usage to last month?",
+      "Can I see my usage trends over the year?"
+    ]
+  },
+  {
+    "core_intent": "How do I update my billing details?",
+    "matches": [
+      "How do I update my billing details?",
+      "How do I change my billing cycle?"
+    ]
+  },
+  {
+    "core_intent": "Why doesn't my battery export show in my usage report?",
+    "matches": [
+      "Why doesn't my battery export show in my usage report?",
+      "How do I export my usage data?"
+    ]
+  },
+  {
+    "core_intent": "What's needed to set up power sharing between two accounts?",
+    "matches": [
+      "What's needed to set up power sharing between two accounts?",
+      "How do I enable peer-to-peer power sharing for a customer?"
+    ]
+  },
+  {
+    "core_intent": "Can I speak to a real person instead of the chatbot?",
+    "matches": [
+      "Can I speak to a real person instead of the chatbot?",
+      "Is there a way to talk to a human?",
+      "Can I call someone instead of using the chatbot?"
+    ]
+  },
+  {
+    "core_intent": "How do I set up a webhook for usage events?",
+    "matches": [
+      "How do I set up a webhook for usage events?",
+      "What events can I subscribe to via webhook?"
+    ]
+  },
+  {
+    "core_intent": "How do I contact support?",
+    "matches": [
+      "How do I contact support?",
+      "How can I get in touch with your support team?",
+      "What is the best way to reach customer support?",
+      "How do I raise a support ticket?"
+    ]
+  }
+]

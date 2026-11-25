@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Listener — powerful insight, powerfully simple</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pink:#ee3d8b;
+    --pink-deep:#6e1e44;
+    --pink-soft:#fdeef4;
+    --ink:#191926;
+    --ink-soft:#5c5b6d;
+    --white:#ffffff;
+    --line:#f0dce6;
+    --radius:18px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{font-family:'Inter',sans-serif;color:var(--ink);background:var(--white);line-height:1.55;}
+  h1,h2,h3{font-family:'Poppins',sans-serif;line-height:1.15;}
+  a{color:inherit;text-decoration:none;}
+  img,svg{display:block;max-width:100%;}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 32px;}
+  :focus-visible{outline:3px solid var(--pink-deep);outline-offset:2px;}
+
+  header{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.92);backdrop-filter:blur(6px);border-bottom:1px solid var(--line);}
+  nav.wrap{display:flex;align-items:center;justify-content:space-between;height:76px;}
+  .logo{display:flex;align-items:center;gap:10px;font-family:'Poppins',sans-serif;font-weight:700;font-size:20px;}
+  .logo-mark{width:34px;height:34px;border-radius:10px;background:var(--pink);display:flex;align-items:center;justify-content:center;}
+  .logo-mark svg{width:18px;height:18px;}
+  .nav-links{display:flex;gap:34px;font-weight:500;font-size:15px;color:var(--ink-soft);}
+  .nav-links a:hover{color:var(--pink);}
+  .nav-cta{display:none;}
+  @media(min-width:760px){.nav-cta{display:inline-flex;}}
+  .btn{display:inline-flex;align-items:center;gap:8px;background:var(--pink);color:var(--white);font-weight:600;font-size:15px;padding:12px 26px;border-radius:999px;border:none;cursor:pointer;transition:transform .15s ease, background .15s ease;}
+  .btn:hover{background:var(--pink-deep);transform:translateY(-1px);}
+  .btn-ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line);}
+  .btn-ghost:hover{background:var(--pink-soft);color:var(--ink);transform:none;}
+
+  .hero{padding:76px 0 64px;}
+  .hero .wrap{display:grid;grid-template-columns:1fr;gap:44px;align-items:center;}
+  @media(min-width:900px){.hero .wrap{grid-template-columns:1.05fr .95fr;}}
+  .eyebrow-line{color:var(--pink-deep);font-weight:600;font-size:14px;margin-bottom:14px;}
+  .hero h1{font-size:44px;font-weight:800;letter-spacing:-0.5px;}
+  @media(min-width:700px){.hero h1{font-size:56px;}}
+  .hero p.lead{margin-top:20px;font-size:18px;color:var(--ink-soft);max-width:46ch;}
+  .hero-ctas{margin-top:30px;display:flex;gap:14px;flex-wrap:wrap;}
+  .hero-art{background:var(--pink-deep);border-radius:28px;padding:38px;aspect-ratio:1/0.85;display:flex;align-items:center;justify-content:center;}
+
+  .live-note{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--ink-soft);margin-top:18px;}
+  .live-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#22c55e;}
+
+  .section{padding:72px 0;}
+  .section-soft{background:var(--pink-soft);}
+  .section-head{max-width:60ch;margin-bottom:44px;}
+  .section-head h2{font-size:32px;font-weight:700;}
+  .section-head p{margin-top:12px;color:var(--ink-soft);font-size:17px;}
+
+  .cards{display:grid;grid-template-columns:1fr;gap:24px;}
+  @media(min-width:760px){.cards{grid-template-columns:repeat(3,1fr);}}
+  .card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:30px;transition:box-shadow .15s ease, transform .15s ease;}
+  .card:hover{box-shadow:0 10px 28px rgba(110,30,68,.10);transform:translateY(-2px);}
+  .card-icon{width:46px;height:46px;border-radius:12px;background:var(--pink);display:flex;align-items:center;justify-content:center;margin-bottom:18px;}
+  .card-icon svg{width:24px;height:24px;stroke:var(--white);}
+  .card h3{font-size:19px;font-weight:600;margin-bottom:8px;}
+  .card p{color:var(--ink-soft);font-size:15px;}
+
+  .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:24px;}
+  @media(min-width:760px){.stats{grid-template-columns:repeat(4,1fr);}}
+  .stat b{display:block;font-family:'Poppins',sans-serif;font-size:34px;color:var(--pink-deep);}
+  .stat span{color:var(--ink-soft);font-size:14px;}
+
+  /* Data tables, restyled to match the pink system but still driven by real Jinja2 data */
+  .data-block{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:28px 30px;margin-bottom:24px;}
+  .data-block h3{font-size:18px;font-weight:600;margin-bottom:14px;}
+  .data-block p.hint{color:var(--ink-soft);font-size:14px;margin-bottom:14px;}
+  table{border-collapse:collapse;width:100%;}
+  th,td{text-align:left;padding:10px 14px;font-size:14.5px;border-bottom:1px solid var(--line);}
+  th{color:var(--pink-deep);font-family:'Poppins',sans-serif;font-weight:600;font-size:13px;text-transform:none;}
+  tr:last-child td{border-bottom:none;}
+  .cluster-group{margin-bottom:18px;}
+  .cluster-group strong{color:var(--pink-deep);}
+  .cluster-group ul{margin:8px 0 0 20px;color:var(--ink-soft);font-size:14.5px;}
+
+  .testimonial{background:var(--pink-deep);color:var(--white);border-radius:28px;padding:52px 40px;display:grid;gap:18px;max-width:760px;margin:0 auto;text-align:center;}
+  .testimonial p.quote{font-family:'Poppins',sans-serif;font-size:22px;font-weight:600;line-height:1.4;}
+  .testimonial .who{color:#f4c9dd;font-size:14px;}
+
+  .chat-panel{border:1px solid var(--line);border-radius:24px;overflow:hidden;background:var(--white);box-shadow:0 20px 50px rgba(25,25,38,.08);max-width:640px;margin:0 auto;}
+  .chat-head{background:var(--pink-deep);color:var(--white);padding:18px 24px;display:flex;align-items:center;gap:12px;}
+  .dot{width:9px;height:9px;border-radius:50%;background:#5be07a;}
+  .chat-head strong{font-family:'Poppins',sans-serif;font-size:15px;}
+  .chat-head span{font-size:12px;color:#f4c9dd;display:block;}
+  .chat-log{height:340px;overflow-y:auto;padding:20px 24px;display:flex;flex-direction:column;gap:14px;background:var(--pink-soft);}
+  .msg{max-width:80%;padding:11px 16px;border-radius:16px;font-size:14.5px;line-height:1.45;}
+  .msg.user{align-self:flex-end;background:var(--pink);color:var(--white);border-bottom-right-radius:4px;}
+  .msg.bot{align-self:flex-start;background:var(--white);color:var(--ink);border:1px solid var(--line);border-bottom-left-radius:4px;}
+  .msg.bot.pending{color:var(--ink-soft);font-style:italic;}
+  .chat-input-row{display:flex;gap:10px;padding:16px;border-top:1px solid var(--line);background:var(--white);}
+  .chat-input-row input{flex:1;border:1.5px solid var(--line);border-radius:999px;padding:12px 18px;font-size:14.5px;font-family:inherit;}
+  .chat-input-row input:focus{border-color:var(--pink);}
+  .chat-input-row button{width:46px;height:46px;border-radius:50%;padding:0;flex-shrink:0;}
+  .chat-note{text-align:center;font-size:13px;color:var(--ink-soft);margin-top:14px;}
+  .chat-note code{background:var(--pink-soft);padding:2px 6px;border-radius:6px;}
+
+  footer{border-top:1px solid var(--line);padding:44px 0;}
+  footer .wrap{display:flex;flex-direction:column;gap:18px;align-items:flex-start;}
+  @media(min-width:700px){footer .wrap{flex-direction:row;justify-content:space-between;align-items:center;}}
+  footer .foot-links{display:flex;gap:26px;font-size:14px;color:var(--ink-soft);flex-wrap:wrap;}
+  footer .copyright{font-size:13px;color:var(--ink-soft);}
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="wrap">
+    <div class="logo">
+      <span class="logo-mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M12 3v10M12 13a5 5 0 0 1-5-5M12 13a5 5 0 0 0 5-5"/><circle cx="12" cy="20" r="1.5" fill="#fff"/></svg>
+      </span>
+      Listener
+    </div>
+    <div class="nav-links">
+      <a href="#insights">Insights</a>
+      <a href="#chat">Try the chat</a>
+      <a href="#about">About</a>
+    </div>
+    <a href="#chat" class="btn nav-cta">Try the live chat</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <div class="eyebrow-line">Built for OLT support conversations</div>
+      <h1>Powerful insight,<br>powerfully simple</h1>
+      <p class="lead">Listener turns raw chatbot conversation logs into insights that are traceable back to real evidence — every number on this page comes straight from the interaction data, nothing estimated or summarised by hand.</p>
+      <div class="hero-ctas">
+        <a href="#chat" class="btn">Try the live chat</a>
+        <a href="#insights" class="btn btn-ghost">See what it finds</a>
+      </div>
+      <div class="live-note"><span class="live-dot"></span>Live — refreshes automatically every 20 seconds</div>
+    </div>
+    <div class="hero-art">
+      <svg viewBox="0 0 220 200" width="240">
+        <g fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="20" y="20" width="180" height="120" rx="14"/>
+          <line x1="20" y1="50" x2="200" y2="50"/>
+          <circle cx="38" cy="35" r="3" fill="#ffffff" stroke="none"/>
+          <circle cx="50" cy="35" r="3" fill="#ffffff" stroke="none"/>
+          <circle cx="62" cy="35" r="3" fill="#ffffff" stroke="none"/>
+          <rect x="36" y="66" width="90" height="14" rx="7"/>
+          <rect x="94" y="90" width="90" height="14" rx="7"/>
+          <rect x="36" y="114" width="60" height="14" rx="7"/>
+          <path d="M55 160 L75 175 L110 145" />
+        </g>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- Live stats strip: real numbers from Flask context (same as attachment 1), not hardcoded -->
+<section class="section section-soft">
+  <div class="wrap">
+    <div class="stats">
+      <div class="stat"><b id="total-interactions">{{ total_interactions }}</b><span>interactions analysed</span></div>
+      <div class="stat"><b id="resolved-rate">{{ resolved_rate }}%</b><span>resolved on first answer</span></div>
+      <div class="stat"><b>{{ looping_sessions|length }}</b><span>looping sessions found</span></div>
+      <div class="stat"><b id="unclear-rate">{{ unclear_rate }}%</b><span>unclear rate</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="insights">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>What Listener found</h2>
+      <p>Every table below is driven straight from the interaction dataset — the same pipeline as the original dashboard, just restyled.</p>
+    </div>
+
+    <div class="data-block">
+      <h3>Coverage by OLT product area</h3>
+      <p class="hint">How many unique questions and total interactions fall under each real OLT product:</p>
+      <table id="coverage-table">
+        <tr><th>Product area</th><th>Unique questions</th><th>Total interactions</th></tr>
+        {% for row in category_coverage %}
+        <tr><td>{{ row.category }}</td><td>{{ row.unique_questions }}</td><td>{{ row.total_interactions }}</td></tr>
+        {% endfor %}
+      </table>
+    </div>
+
+    <div class="data-block">
+      <h3>Top recurring questions</h3>
+      <table id="top-questions-table">
+        <tr><th>Question</th><th>Times asked</th></tr>
+        {% for row in top_questions %}
+        <tr><td>{{ row.user_question }}</td><td>{{ row.times_asked }}</td></tr>
+        {% endfor %}
+      </table>
+    </div>
+
+    <div class="data-block">
+      <h3>Response friction</h3>
+      <p class="hint">Out of <span id="total-interactions-2">{{ total_interactions }}</span> total interactions:</p>
+      <table id="friction-table">
+        <tr><th>Status</th><th>Percent</th></tr>
+        <tr><td>Resolved</td><td id="resolved-rate-2">{{ resolved_rate }}%</td></tr>
+        <tr><td>Unresolved</td><td id="unresolved-rate">{{ unresolved_rate }}%</td></tr>
+        <tr><td>Unclear</td><td id="unclear-rate-2">{{ unclear_rate }}%</td></tr>
+      </table>
+    </div>
+
+    <div class="data-block">
+      <h3>Sessions with the most follow-up questions (looping behaviour)</h3>
+      <table id="looping-table">
+        <tr><th>Session ID</th><th>Follow-up count</th></tr>
+        {% for row in looping_sessions %}
+        <tr><td>{{ row.session_id }}</td><td>{{ row.follow_up_count }}</td></tr>
+        {% endfor %}
+      </table>
+    </div>
+
+    <div class="data-block">
+      <h3>Worst-performing chatbot responses</h3>
+      <p class="hint">Responses that most often led to an unresolved outcome:</p>
+      <table id="worst-table">
+        <tr><th>Response</th><th>Times used</th><th>Unresolved rate</th></tr>
+        {% for row in worst_responses %}
+        <tr><td>{{ row.chatbot_response_short }}</td><td>{{ row.total_uses }}</td><td>{{ row.unresolved_rate }}%</td></tr>
+        {% endfor %}
+      </table>
+    </div>
+
+    <div class="data-block">
+      <h3>Semantically similar questions (AI grouping)</h3>
+      {% if semantic_clusters %}
+      <p class="hint">Questions that are worded differently but mean the same thing:</p>
+      {% for cluster in semantic_clusters %}
+      <div class="cluster-group">
+        <strong>Group: {{ cluster.core_intent }}</strong>
+        <ul>
+          {% for match in cluster.matches %}
+          <li>{{ match }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endfor %}
+      {% else %}
+      <p class="hint"><em>No clusters found yet. Run <code>python semantic_analysis.py</code> once to generate them.</em></p>
+      {% endif %}
+    </div>
+
+    <div class="data-block">
+      <h3>Customers with repeat, unresolved issues</h3>
+      <p class="hint">Anonymised synthetic customer IDs — no real identity involved. Only customers seen more than once are shown:</p>
+      <table id="repeat-customers-table">
+        <tr><th>Customer ID</th><th>Total sessions</th><th>Unresolved sessions</th></tr>
+        {% for row in repeat_customers %}
+        <tr><td>{{ row.customer_id }}</td><td>{{ row.total_sessions }}</td><td>{{ row.unresolved_sessions }}</td></tr>
+        {% endfor %}
+      </table>
+    </div>
+
+    <div class="data-block">
+      <h3>Interactions by channel</h3>
+      <p class="hint">Currently chat-only — this table is ready to show email/call once those adapters feed real data in:</p>
+      <table id="channel-table">
+        <tr><th>Channel</th><th>Total interactions</th></tr>
+        {% for row in channel_breakdown %}
+        <tr><td>{{ row.channel }}</td><td>{{ row.total_interactions }}</td></tr>
+        {% endfor %}
+      </table>
+    </div>
+
+    <div class="data-block">
+      <h3>Live chat activity</h3>
+      <table id="chat-activity-table">
+        <tr><th>Classification</th><th>Count</th></tr>
+        <tr><td colspan="2"><em>No live chat activity yet — try the chat!</em></td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="about">
+  <div class="wrap">
+    <div class="testimonial">
+      <p class="quote">"Listener turned a pile of chat logs into three answers we could actually act on."</p>
+      <div class="who">— early feedback, OLT support team</div>
+    </div>
+  </div>
+</section>
+
+<!-- Chat panel: wired to the real /chat Flask endpoint (cosine-similarity + logging), NOT a direct Ollama call -->
+<section class="section section-soft" id="chat">
+  <div class="wrap">
+    <div class="section-head" style="margin:0 auto 36px;text-align:center;max-width:56ch;">
+      <h2>Try the live chat</h2>
+      <p>This talks to the same backend that powers the insights above — every message you send gets logged and shows up in "Live chat activity".</p>
+    </div>
+    <div class="chat-panel">
+      <div class="chat-head">
+        <span class="dot"></span>
+        <div>
+          <strong>Listener Chat</strong>
+          <span>Backed by /chat — retrieval + agent_instructions.md</span>
+        </div>
+      </div>
+      <div class="chat-log" id="chatLog">
+        <div class="msg bot">Hi — ask me anything about the OLT support topics in the dataset.</div>
+      </div>
+      <div class="chat-input-row">
+        <input id="chatInput" type="text" placeholder="Type a message…" autocomplete="off">
+        <button class="btn" id="sendBtn" aria-label="Send">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4Z"/></svg>
+        </button>
+      </div>
+    </div>
+    <p class="chat-note">Talks to <code>/chat</code> on this same server. If replies fail, check that your Flask app is running and that the <code>/chat</code> route is reachable.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="logo" style="font-size:16px;">
+      <span class="logo-mark" style="width:26px;height:26px;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" width="14" height="14"><path d="M12 3v10M12 13a5 5 0 0 1-5-5M12 13a5 5 0 0 0 5-5"/><circle cx="12" cy="20" r="1.5" fill="#fff"/></svg>
+      </span>
+      Listener
+    </div>
+    <div class="foot-links">
+      <a href="#insights">Insights</a>
+      <a href="#chat">Chat</a>
+      <a href="#about">About</a>
+    </div>
+    <div class="copyright">Internal prototype — OLT Ltd</div>
+  </div>
+</footer>
+
+<script>
+function setText(id, value) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = value;
+}
+
+// Same polling behaviour as the original dashboard: hit /stats every 20s
+// and refresh the live-updating parts of the page in place.
+function refreshDashboard() {
+    fetch('/stats')
+        .then(res => res.json())
+        .then(data => {
+            setText('total-interactions', data.total_interactions);
+            setText('total-interactions-2', data.total_interactions);
+            setText('resolved-rate', data.resolved_rate + '%');
+            setText('resolved-rate-2', data.resolved_rate + '%');
+            setText('unresolved-rate', data.unresolved_rate + '%');
+            setText('unclear-rate', data.unclear_rate + '%');
+            setText('unclear-rate-2', data.unclear_rate + '%');
+
+            const coverageTable = document.getElementById('coverage-table');
+            coverageTable.innerHTML = '<tr><th>Product area</th><th>Unique questions</th><th>Total interactions</th></tr>';
+            (data.category_coverage || []).forEach(row => {
+                coverageTable.innerHTML += `<tr><td>${row.category}</td><td>${row.unique_questions}</td><td>${row.total_interactions}</td></tr>`;
+            });
+
+            const topTable = document.getElementById('top-questions-table');
+            topTable.innerHTML = '<tr><th>Question</th><th>Times asked</th></tr>';
+            data.top_questions.forEach(row => {
+                topTable.innerHTML += `<tr><td>${row.user_question}</td><td>${row.times_asked}</td></tr>`;
+            });
+
+            const loopTable = document.getElementById('looping-table');
+            loopTable.innerHTML = '<tr><th>Session ID</th><th>Follow-up count</th></tr>';
+            data.looping_sessions.forEach(row => {
+                loopTable.innerHTML += `<tr><td>${row.session_id}</td><td>${row.follow_up_count}</td></tr>`;
+            });
+
+            const worstTable = document.getElementById('worst-table');
+            worstTable.innerHTML = '<tr><th>Response</th><th>Times used</th><th>Unresolved rate</th></tr>';
+            data.worst_responses.forEach(row => {
+                worstTable.innerHTML += `<tr><td>${row.chatbot_response_short}</td><td>${row.total_uses}</td><td>${row.unresolved_rate}%</td></tr>`;
+            });
+
+            const repeatTable = document.getElementById('repeat-customers-table');
+            repeatTable.innerHTML = '<tr><th>Customer ID</th><th>Total sessions</th><th>Unresolved sessions</th></tr>';
+            (data.repeat_customers || []).forEach(row => {
+                repeatTable.innerHTML += `<tr><td>${row.customer_id}</td><td>${row.total_sessions}</td><td>${row.unresolved_sessions}</td></tr>`;
+            });
+
+            const channelTable = document.getElementById('channel-table');
+            channelTable.innerHTML = '<tr><th>Channel</th><th>Total interactions</th></tr>';
+            (data.channel_breakdown || []).forEach(row => {
+                channelTable.innerHTML += `<tr><td>${row.channel}</td><td>${row.total_interactions}</td></tr>`;
+            });
+
+            const chatTable = document.getElementById('chat-activity-table');
+            const activity = data.chat_activity || {};
+            const keys = Object.keys(activity);
+            if (keys.length === 0) {
+                chatTable.innerHTML = '<tr><th>Classification</th><th>Count</th></tr><tr><td colspan="2"><em>No live chat activity yet — try the chat!</em></td></tr>';
+            } else {
+                chatTable.innerHTML = '<tr><th>Classification</th><th>Count</th></tr>';
+                keys.forEach(key => {
+                    chatTable.innerHTML += `<tr><td>${key}</td><td>${activity[key]}</td></tr>`;
+                });
+            }
+        })
+        .catch(err => console.error('Stats refresh failed:', err));
+}
+setInterval(refreshDashboard, 20000);
+
+// Chat panel wired to your real /chat Flask endpoint.
+// ASSUMPTION: POST /chat expects JSON {"message": "..."} and returns JSON {"response": "..."}.
+// If your route uses different field names, change the two spots marked below.
+const chatLog = document.getElementById('chatLog');
+const chatInput = document.getElementById('chatInput');
+const sendBtn = document.getElementById('sendBtn');
+
+function addMessage(role, text, pending=false){
+    const div = document.createElement('div');
+    div.className = 'msg ' + role + (pending ? ' pending' : '');
+    div.textContent = text;
+    chatLog.appendChild(div);
+    chatLog.scrollTop = chatLog.scrollHeight;
+    return div;
+}
+
+async function sendMessage(){
+    const text = chatInput.value.trim();
+    if (!text) return;
+    chatInput.value = '';
+    addMessage('user', text);
+
+    const pendingEl = addMessage('bot', 'Thinking…', true);
+
+    try {
+      const res = await fetch('/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: text })   // <-- adjust key name here if your /chat expects something else
+      });
+
+      if (!res.ok) throw new Error('Server responded with status ' + res.status);
+
+      const data = await res.json();
+      pendingEl.textContent = (data.response || '').trim() || '(no response returned)';   // <-- adjust key name here to match your /chat response
+      pendingEl.classList.remove('pending');
+    } catch (err) {
+      pendingEl.textContent = "Couldn't reach /chat. Make sure your Flask app is running and the /chat route is defined.";
+      pendingEl.classList.remove('pending');
+    }
+}
+
+sendBtn.addEventListener('click', sendMessage);
+chatInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') sendMessage();
+});
+</script>
+
+</body>
+</html>
